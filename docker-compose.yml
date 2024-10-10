@@ -1,0 +1,27 @@
+services:
+  backend:
+    build:
+      context: ./BiteBalanceBackend
+    container_name: bitebalancebackend
+    command: uvicorn app.main:app --host 0.0.0.0 --port 80
+    ports:
+      - "80:80"
+    volumes:
+      - ./BiteBalanceBackend:/code
+    environment:
+      - ENV=development
+
+  frontend:
+    build:
+      context: ./BiteBalance
+    container_name: bitebalancefrontend
+    ports:
+      - "19000:19000"   # Expo DevTools
+      - "19001:19001"   # Expo Web interface
+      - "19002:19002"   # Metro Bundler debugger
+    volumes:
+      - ./BiteBalance:/app
+    environment:
+      - EXPO_DEVTOOLS_LISTEN_PORT=19002
+    stdin_open: true
+    tty: true
