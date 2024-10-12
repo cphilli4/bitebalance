@@ -7,7 +7,7 @@ services:
       context: ./
       dockerfile: ./Dockerfile
       labels:
-        - imdb-backend
+        - bitebalancebackend
       args:
         - stage=${STAGE:-none}
     volumes:
