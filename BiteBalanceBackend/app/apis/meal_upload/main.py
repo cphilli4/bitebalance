@@ -12,7 +12,7 @@ from . import crud
 UPLOAD_DIR = Path("/tmp/uploads/")
 UPLOAD_DIR.mkdir(exist_ok=True)
 
-async def fn_create_meal(
+async def fn_upload_meal(
     meal: UploadFile, 
     label: str,
     meal_repo: MealRepository,
@@ -23,7 +23,7 @@ async def fn_create_meal(
     
     # new_meal = NewMeal()
     
-    # return await crud.fn_create_meal()
+    # return await crud.fn_upload_meal()
     
     # For Local test onlt, save the uploaded image file
     image_path = UPLOAD_DIR / meal.filename

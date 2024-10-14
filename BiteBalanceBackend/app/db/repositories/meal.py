@@ -18,7 +18,7 @@ GET_MEAL_SQL = """
 """
 
 class MealRepository(BaseRepository):
-    async def create_meal(
+    async def upload_meal(
         self, *, new_meal: Meal
     ) -> MealDBModel:
         query_values = new_meal.model_dump()
