@@ -12,6 +12,7 @@ services:
         - stage=${STAGE:-none}
     volumes:
         - ./app:/app
+        - ./uploads:/tmp/uploads
     entrypoint: "./entrypoint.sh"
     command: "dev"
     ports:
