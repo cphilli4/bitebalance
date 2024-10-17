@@ -20,11 +20,9 @@ class ImageRecipeExtractor:
                 ],
                 max_tokens=300,
             )
-            return completion.choices[0].message.content
+            return sorted(completion.choices[0].message.content.split(", "))
         except Exception as e:
             return "API Error"
-
-
 
 
 
