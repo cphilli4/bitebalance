@@ -26,6 +26,8 @@ database_url = (
 )
 test_database_url = f"{database_url}_test"
 
+logger.info("NORMAL DATABASE URL: {}".format(database_url))
+logger.info("NORMAL TEST DATABASE URL: {}".format(test_database_url))
 
 def run_migrations_online() -> None:
     """
@@ -34,18 +36,19 @@ def run_migrations_online() -> None:
     is_test = os.environ.get("TEST")
     # handle testing config for migrations
     if is_test:
+        logger.info("RUNNING IS TEST COMMAND: {}".format(is_test))
         # connect to primary db
         default_engine = create_engine(str(database_url), isolation_level="AUTOCOMMIT")
         # drop testing db if it exists and create a fresh one
         with default_engine.connect() as default_conn:
             default_conn.execute(
-                f"DROP DATABASE IF EXISTS {app_config.POSTGRES_DB}_test"
+                f"DROP DATABASE IF EXISTS {app_config.POSTGRES_DB}"
             )
-            default_conn.execute(f"CREATE DATABASE {app_config.POSTGRES_DB}_test")
+            default_conn.execute(f"CREATE DATABASE {app_config.POSTGRES_DB}")
 
     connectable = config.attributes.get("connection", None)
     config.set_main_option(
-        "sqlalchemy.url", str(test_database_url if is_test else database_url)
+        "sqlalchemy.url", str( database_url)
     )
     if connectable is None:
         connectable = engine_from_config(

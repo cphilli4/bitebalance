@@ -1,5 +1,5 @@
 from pathlib import Path
-
+from loguru import logger
 from fastapi import UploadFile, HTTPException
 
 from app.models.domains.meal import NewMeal
