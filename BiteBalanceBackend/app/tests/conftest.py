@@ -49,6 +49,8 @@ def apply_migrations():
     warnings.filterwarnings("ignore", category=DeprecationWarning)
     # os.environ["TEST"] = "1"
     config = Config("/app/alembic.ini")
+    script_location = "/app/db/migrations"
+    config.set_main_option("script_location", script_location)
     command.upgrade(config, "head")
     yield
     # alembic.command.downgrade(config, "base")

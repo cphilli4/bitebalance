@@ -10,7 +10,7 @@ from pydantic import BaseModel
 class CoreModel(BaseModel):
     class Config:
         # alias_generator = camelize
-        allow_population_by_field_name = True
+        populate_by_name= True
 
 
 class IDModelMixin(CoreModel):
