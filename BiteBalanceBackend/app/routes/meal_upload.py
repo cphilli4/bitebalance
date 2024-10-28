@@ -13,7 +13,7 @@ router = APIRouter()
 
 
 @router.post(
-    "/upload-meal-with-label/",
+    "/upload-meal-with-label",
     tags=["meal_label"],
     name="meal_label:post",
     )

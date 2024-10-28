@@ -52,3 +52,4 @@ app.add_event_handler("shutdown", create_stop_app_handler(app))
 
 app.add_event_handler("startup", users_module.mount(app))
 app.add_event_handler("startup", application_module.mount(app))
+
