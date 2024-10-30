@@ -25,46 +25,37 @@ class IngredientRank:
                         "role": "user",
                         "content": [
                             {"type": "text",
-                             "text": "The following list is in the form 'ingredient|amount in ounces'. Give it a score out of 100 based on the table given. Each ingredient can count in multiple categories. Only respond in with the total score number, no other text"},
-                            {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{encode_image()}"}},
-                            {"type": "text", "text": self.ingredients}
-                        ],
-                    }
-                ],
-                max_tokens=300,
-            )
-            completion2 = self.client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=[
-                    {
-                        "role": "user",
-                        "content": [
-                            {"type": "text",
-                             "text": "The following list is in the form 'ingredient|amount in ounces'. Give it a score out of 100 based on the table given. Each ingredient can count in multiple categories. Only respond in with the total score number, no other text"},
-                            {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{encode_image()}"}},
-                            {"type": "text", "text": self.ingredients}
-                        ],
-                    }
-                ],
-                max_tokens=300,
-            )
-            completion3 = self.client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=[
-                    {
-                        "role": "user",
-                        "content": [
-                            {"type": "text",
-                             "text": "The following list is in the form 'ingredient|amount in ounces'. Give it a score out of 100 based on the table given. Each ingredient can count in multiple categories. Only respond in with the total score number, no other text"},
-                            {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{encode_image()}"}},
-                            {"type": "text", "text": self.ingredients}
-                        ],
-                    }
-                ],
-                max_tokens=300,
-            )
+                             "text": "The following list is in the form 'ingredient|amount in ounces'."
+                                     " Give it a score out of 100 based on the following criteria: "
+                                     "total fruits ≥0.8 cup is maximum 5 points, "
+                                     "Whole Fruits ≥0.4 cup is maximum 5 points, "
+                                     "Total Vegetables ≥1.1 cup is maximum 5 points, "
+                                     "Greens and Beans ≥0.2 cup is maximum 5 points, "
+                                     "Whole Grains ≥1.5 oz is maximum 10 points, "
+                                     "Dairy ≥1.3 cup is maximum 10 points, "
+                                     "Total Protein Foods ≥2.5 oz is maximum 5 points, "
+                                     "Seafood and Plant Proteins ≥0.8 oz is maximum 5 points, "
+                                     "Refined grains ≤1.8 oz is maximum 10 points, "
+                                     "Added sugars ≤6.5% of energy is maximum 10 points, "
+                                     "Sodium ≤1.1 gram is maximum 10 points, "
+                                     "Saturated Fats ≤8% of energy is maximum 10 points, "
+                                     "Fatty Acids (PUFAs + MUFAs)/SFAs ≥2.5 is maximum 10 points. "
+                                     "Each ingredient can count in multiple categories. "
+                                     "You can give up to the maximum number of points. "
+                                     "In essence you want to rank unprocessed foods higher than processed ones. "
+                                     "Do this three times."
+                                     " Only respond in the form 'A B C' "
+                                     "where A is your first estimate, B is your second, and C is your third"},
 
-            return math.floor((int(completion1.choices[0].message.content)+int(completion2.choices[0].message.content)+int(completion3.choices[0].message.content))/3)
+                            {"type": "text", "text": self.ingredients}
+                        ],
+                    }
+                ],
+                max_tokens=300,
+            )
+            results= [int(item) for item in completion1.choices[0].message.content.split(" ")]
+
+            return math.floor(sum(results) / 3)
         except Exception as e:
             return "API Error"
 
