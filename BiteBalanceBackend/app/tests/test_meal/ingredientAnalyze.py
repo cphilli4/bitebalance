@@ -11,6 +11,7 @@ def encode_image():
         return base64.b64encode(image.read()).decode('utf-8')
 
 
+
 class IngredientRank:
     def __init__(self, ingredients):
         self.ingredients = ''.join(str(x) for x in ingredients)
@@ -18,7 +19,7 @@ class IngredientRank:
 
     def rank_ingredients(self):
         try:
-            completion1 = self.client.chat.completions.create(
+            completion = self.client.chat.completions.create(
                 model="gpt-4o-mini",
                 messages=[
                     {
@@ -42,10 +43,10 @@ class IngredientRank:
                                      "Fatty Acids (PUFAs + MUFAs)/SFAs ≥2.5 is maximum 10 points. "
                                      "Each ingredient can count in multiple categories. "
                                      "You can give up to the maximum number of points. "
-                                     "In essence you want to rank unprocessed foods higher than processed ones. "
-                                     "Do this three times."
-                                     " Only respond in the form 'A B C' "
-                                     "where A is your first estimate, B is your second, and C is your third"},
+                                     "In essence you want to rank unprocessed foods higher than processed ones. "''
+                                     "Format your response as 'X' where X is the sum off all points earned by the ingredients."
+                                     "DO NOT respond with any other text"},
+
 
                             {"type": "text", "text": self.ingredients}
                         ],
@@ -53,9 +54,9 @@ class IngredientRank:
                 ],
                 max_tokens=300,
             )
-            results= [int(item) for item in completion1.choices[0].message.content.split(" ")]
-
-            return math.floor(sum(results) / 3)
+            result = int(completion.choices[0].message.content)
+            rounded = result - result % 5
+            return rounded
         except Exception as e:
             return "API Error"
 
