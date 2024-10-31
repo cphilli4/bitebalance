@@ -55,7 +55,11 @@ class IngredientRank:
                 max_tokens=300,
             )
             result = int(completion.choices[0].message.content)
-            rounded = result - result % 5
+            mod = result % 5
+            if mod >2:
+                rounded = result + (5-mod)
+            else:
+                rounded = result - mod
             return rounded
         except Exception as e:
             return "API Error"
