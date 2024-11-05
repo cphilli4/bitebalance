@@ -1,7 +1,4 @@
 import base64
-import piexif
-import os
-from PIL import Image
 from openai import OpenAI
 
 class ImageRecipeExtractor:

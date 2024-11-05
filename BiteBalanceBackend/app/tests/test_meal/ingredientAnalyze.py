@@ -1,5 +1,5 @@
 import base64
-import math
+
 
 from openai import OpenAI
 
@@ -26,9 +26,9 @@ class IngredientRank:
                         "role": "user",
                         "content": [
                             {"type": "text",
-                             "text": "The following list is in the form 'ingredient|amount in ounces'."
-                                     " Give it a score out of 100 based on the following criteria: "
-                                     "total fruits ≥0.8 cup is maximum 5 points, "
+                             "text": "The following list is in the form 'ingredient|amount in ounces'. "
+                                     "Give it a score out of 100 based on the following criteria: "
+                                     "Total fruits ≥0.8 cup is maximum 5 points, "
                                      "Whole Fruits ≥0.4 cup is maximum 5 points, "
                                      "Total Vegetables ≥1.1 cup is maximum 5 points, "
                                      "Greens and Beans ≥0.2 cup is maximum 5 points, "
@@ -44,7 +44,8 @@ class IngredientRank:
                                      "Each ingredient can count in multiple categories. "
                                      "You can give up to the maximum number of points. "
                                      "In essence you want to rank unprocessed foods higher than processed ones. "''
-                                     "Format your response as 'X' where X is the sum off all points earned by the ingredients."
+                                     "Format your response as 'X' "
+                                     "where X is the sum off all points earned by the ingredients."
                                      "DO NOT respond with any other text"},
 
 
