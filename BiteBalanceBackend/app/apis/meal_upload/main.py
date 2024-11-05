@@ -1,16 +1,20 @@
+import json
 from pathlib import Path
-from loguru import logger
-from fastapi import UploadFile, HTTPException
+
+
+from fastapi import UploadFile
 
 from app.models.domains.meal import NewMeal
 from app.models.core import IDModelMixin
 from app.db.repositories import MealRepository
+from app.utils.s3_bucket_access import upload_meal
 
 from . import crud
 
 # For local test only, Directory to save uploaded images
 UPLOAD_DIR = Path("/tmp/uploads/")
 UPLOAD_DIR.mkdir(exist_ok=True)
+
 
 async def fn_upload_meal(
     meal: UploadFile, 
@@ -19,23 +23,25 @@ async def fn_upload_meal(
     *,
     raise_duolicate_exception = False,
 ) -> IDModelMixin:
-    # process meal image here
     
-    # new_meal = NewMeal()
+    # analyse meal contents here with chatGPT
+    meal_contents = ['avocado', 'brown rice', 'chicken', 'cilantro', 'corn', 'jicama', 'lime', 'tomatoes']
+    meal_data = {
+        'contents': meal_contents,
+        'nutrition_value': 'nutrition_value',
+    }
     
-    # return await crud.fn_upload_meal()
+    # Save meal on S3 bucket here
+    meal_url = await upload_meal(meal)
     
-    # For Local test onlt, save the uploaded image file
-    image_path = UPLOAD_DIR / meal.filename
+    # Convert Python dictionary to JSON string
+    meal_data = json.dumps(meal_data)
     
-    try:
-        # Save the file to the uploads directory
-        with image_path.open("wb") as buffer:
-            buffer.write(await meal.read())
-    except Exception as e:
-        raise HTTPException(status_code=500, detail="File upload failed")
+    new_meal = NewMeal(label=label, url=meal_url, meal_data=meal_data)
     
-    return {"filename": meal.filename, "file_path": str(image_path), "label": str(label)}
+    return await crud.fn_upload_meal(new_meal, meal_repo)
+    
+
     
     
 

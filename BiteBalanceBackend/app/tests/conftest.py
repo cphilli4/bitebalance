@@ -37,33 +37,31 @@ def anyio_backend():
     return "asyncio"
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def event_loop(request):
-    loop = asyncio.get_event_loop_policy().new_event_loop()
+    loop = asyncio.new_event_loop()
     yield loop
     loop.close()
 
 
-@pytest_asyncio.fixture(scope="session")
+@pytest_asyncio.fixture(scope="function")
 def apply_migrations():
     warnings.filterwarnings("ignore", category=DeprecationWarning)
-    # os.environ["TEST"] = "1"
+    os.environ["TEST"] = "1"
     config = Config("/app/alembic.ini")
-    script_location = "/app/db/migrations"
-    config.set_main_option("script_location", script_location)
     command.upgrade(config, "head")
     yield
     # alembic.command.downgrade(config, "base")
 
 
 # Create a new application for testing
-@pytest_asyncio.fixture(scope="session")
+@pytest_asyncio.fixture(scope="function")
 async def app(apply_migrations: None) -> FastAPI:
     from app.main import app
     db_username, db_password = (app_config.POSTGRES_USER, app_config.POSTGRES_PASSWORD)
     database_url = (
         f"postgresql+asyncpg://{db_username}:{db_password}@{app_config.POSTGRES_SERVER}"
-        f":{app_config.POSTGRES_PORT}/{app_config.POSTGRES_DB}"
+        f":{app_config.POSTGRES_PORT}/{app_config.POSTGRES_DB}_test"
     )
     logger.info(
             "  ---------- STARTING APP IN TEST MODE -----------------{}".format(str(app.state))
@@ -88,7 +86,7 @@ async def app(apply_migrations: None) -> FastAPI:
 
 
 
-@pytest_asyncio.fixture(scope="session")
+@pytest_asyncio.fixture(scope="function")
 def db(app: FastAPI) -> Database:
     return app.state.db
 
@@ -114,6 +112,6 @@ async def client(app: FastAPI):
         yield client
 
 
-@pytest_asyncio.fixture(scope="session")
+@pytest_asyncio.fixture(scope="function")
 async def meals_repo(db: Database) -> MealRepository:
     return MealRepository(db)

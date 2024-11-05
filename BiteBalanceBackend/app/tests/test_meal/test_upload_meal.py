@@ -43,10 +43,12 @@ async def test_upload_meal(
         meal_label,
         meals_repo,
     )
-    assert True == True
-    assert isinstance(test_results, dict)
-    assert test_results["filename"] is not None
-    assert test_results["label"] == meal_label
+    test_results_dict = test_results.model_dump()
+    
+    assert isinstance(test_results, MealDBModel)
+    assert test_results_dict["url"] is not None
+    assert test_results_dict["meal_data"] is not None
+    assert test_results_dict["label"] == meal_label
         
 
 # Given = Data and any other constants you will be using, When= Is when the API operates on the data given, Then= Where we make assertions. 

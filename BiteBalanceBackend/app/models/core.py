@@ -2,6 +2,7 @@ import json
 
 from datetime import datetime
 from typing import Any, Optional
+from uuid import UUID
 
 # from humps import camelize
 from pydantic import BaseModel
@@ -14,7 +15,7 @@ class CoreModel(BaseModel):
 
 
 class IDModelMixin(CoreModel):
-    id: Optional[int] = None
+    id: Optional[UUID] = None
 
     # For Deduplication
     def __eq__(self, other):
