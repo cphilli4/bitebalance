@@ -6,7 +6,7 @@ from databases import Database
 from fastapi import FastAPI
 from httpx import AsyncClient
 
-from app.apis.meal_upload.main import fn_upload_meal
+from app.apis.meals.main import fn_upload_meal
 from app.db.repositories import MealRepository
 
 from app.models.domains.meal import NewMeal, MealDBModel

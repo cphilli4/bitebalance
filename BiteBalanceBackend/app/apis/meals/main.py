@@ -1,6 +1,6 @@
+from collections import Counter
+from datetime import date
 import json
-from pathlib import Path
-
 
 from fastapi import UploadFile
 
@@ -10,10 +10,6 @@ from app.db.repositories import MealRepository
 from app.utils.s3_bucket_access import upload_meal
 
 from . import crud
-
-# For local test only, Directory to save uploaded images
-UPLOAD_DIR = Path("/tmp/uploads/")
-UPLOAD_DIR.mkdir(exist_ok=True)
 
 
 async def fn_upload_meal(
@@ -42,7 +38,17 @@ async def fn_upload_meal(
     return await crud.fn_upload_meal(new_meal, meal_repo)
     
 
+async def fn_get_meal_dates_month(
+    meal_repo: MealRepository,
+) -> IDModelMixin:
     
+    today_month = date.today().month
     
-
+    dates = await crud.fn_get_meal_dates_month(today_month, meal_repo)
+    if dates :
+        dates_list = [ f"{data.created_at.year}-{data.created_at.month}-{data.created_at.day}"  for data in dates ]
+        count_dates = Counter(dates_list)  # Count occurrences of each date
+        print("The list of dates is: {}".format(count_dates))
+        return count_dates
+    return {}
 

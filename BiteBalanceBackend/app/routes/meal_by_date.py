@@ -1,11 +1,9 @@
 from typing import Any
-from datetime import datetime
 
-from fastapi import APIRouter, Depends, Request, status,File, UploadFile, Form
+from fastapi import APIRouter, Depends, Request
 
-from app.apis.meal_upload import fn_upload_meal
+from app.apis.meal_dates import fn_get_meal_dates
 from app.db.dependency import get_repository
-from app.models.domains.meal import Meal
 
 from app.db.repositories import MealRepository
 
@@ -18,9 +16,11 @@ router = APIRouter()
     tags=["meal_date"],
     name="meal_date:get",
     )
-async def meals_date(
+async def meals_dates(
     request: Request,
-    date: datetime, 
-  
+    meal_repo: MealRepository= Depends(
+        get_repository(MealRepository)
+    ),
 )->Any:
-    ...
+    
+    return await fn_get_meal_dates()

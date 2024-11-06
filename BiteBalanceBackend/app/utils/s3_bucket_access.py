@@ -5,6 +5,7 @@ import boto3
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from botocore.exceptions import ClientError
 
+# Refactor this to a class and create object for each needing routes
 
 # Initialize the S3 client
 s3_client = boto3.client('s3')
@@ -15,6 +16,7 @@ object_key = 'example-folder/specific-object.jpg'  # The specific object path in
 
 
 def process_upload_time()->str:
+    # Smelly code, needs refactoring
     current_time = str(datetime.now()).replace(' ', '-').replace(':', '-')
     current_time = current_time.split('.')
     current_time = current_time[0]
