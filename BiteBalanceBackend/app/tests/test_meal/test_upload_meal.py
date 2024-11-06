@@ -24,10 +24,6 @@ current_dir = Path(__file__).parent
 image_path = current_dir.parent / 'helpers' / 'meal.JPG'
 
 
-@pytest_asyncio.fixture(scope="class")
-def new_meal() -> NewMeal:
-    return "" # return image here
-
 
     
 @pytest.mark.asyncio

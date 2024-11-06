@@ -48,7 +48,6 @@ async def fn_get_meal_dates_month(
     if dates :
         dates_list = [ f"{data.created_at.year}-{data.created_at.month}-{data.created_at.day}"  for data in dates ]
         count_dates = Counter(dates_list)  # Count occurrences of each date
-        print("The list of dates is: {}".format(count_dates))
         return count_dates
     return {}
 
