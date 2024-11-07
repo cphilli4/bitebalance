@@ -1,11 +1,11 @@
 import base64
 from openai import OpenAI
 
+
 class ImageRecipeExtractor:
     def __init__(self, image_path):
         self.image_path = image_path
         self.client = OpenAI()
-
 
     def encode_image(self):
         with open(self.image_path, 'rb') as image:
@@ -19,8 +19,16 @@ class ImageRecipeExtractor:
                     {
                         "role": "user",
                         "content": [
-                            {"type": "text", "text": "What is the recipe of the food in the image? If no food is present, please respond with 'No food detected'. Otherwise, just respond with a comma-separated list of the form 'ingredient|measurement in oz'. Do not specify oz, just give the number"},
-                            {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{self.encode_image()}"}},
+                            {"type": "text", "text":
+                                "What is the recipe of the food in the image? "
+                                "If no food is present, please respond with 'No food detected'. "
+                                "Otherwise, just respond with a comma-separated list of the form "
+                                "'ingredient|measurement in oz'."
+                                "Do not specify oz, just give the number. "
+                                "Don't respond with plurals."},
+
+                            {"type": "image_url",
+                             "image_url": {"url": f"data:image/jpeg;base64,{self.encode_image()}"}},
                         ],
                     }
                 ],
@@ -29,6 +37,3 @@ class ImageRecipeExtractor:
             return sorted(completion.choices[0].message.content.split(", "))
         except Exception as e:
             return "API Error"
-
-
-

@@ -64,19 +64,3 @@ class IngredientRank:
             return rounded
         except Exception as e:
             return "API Error"
-
-extractor = ImageRecipeExtractor('../helpers/meal.JPG')
-recipe= extractor.get_recipe()
-score = IngredientRank(recipe).rank_ingredients()
-extractor1 = ImageRecipeExtractor('../helpers/meal1.JPG')
-recipe1= extractor1.get_recipe()
-score1 = IngredientRank(recipe1).rank_ingredients()
-extractor2 = ImageRecipeExtractor('../helpers/meal2.JPG')
-recipe2= extractor2.get_recipe()
-score2 = IngredientRank(recipe2).rank_ingredients()
-print(recipe)
-print(score)
-print(recipe1)
-print(score1)
-print(recipe2)
-print(score2)
