@@ -15,3 +15,15 @@ export const uploadImage = async (formData: FormData) => {
     console.log('uploadImage Error', e)
   }
 };
+
+export const fetchMonthMeals = async (date: string) => {
+  try {
+    const response = await fetch(`http://192.168.64.1:8080/meal-dates?date=${date}`, {
+      method: "GET",
+    });
+    console.log('inside res', response)
+    return response;
+  } catch (e) {
+    console.log('fetchMonthMeals Error', e)
+  }
+}

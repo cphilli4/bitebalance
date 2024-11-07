@@ -1,6 +1,6 @@
-from typing import Any
+from typing import Any, Optional
 
-from fastapi import APIRouter, Depends, Request,File, UploadFile, Form
+from fastapi import APIRouter, Depends, Request,File, UploadFile, Form, Query
 
 from app.apis.meals import (
     fn_upload_meal,
@@ -33,15 +33,16 @@ async def upload_meal_with_label(
 
 
 @router.get(
-    "/meal-dates/",
+    "/meal-dates",
     tags=["meal_date"],
     name="meal_date:get",
     )
 async def meals_dates(
     request: Request,
+    date: Optional[str] = Query(None, description="Date string in format 'MM-DD-YYYY'"),
     meal_repo: MealRepository= Depends(
         get_repository(MealRepository)
     ),
 )->Any:
     
-    return await fn_get_meal_dates_month(meal_repo)
+    return await fn_get_meal_dates_month(date, meal_repo)

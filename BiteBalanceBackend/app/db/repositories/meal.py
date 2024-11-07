@@ -42,6 +42,7 @@ class MealRepository(BaseRepository):
         
         if created_meals: 
             created_meal_dates = [CreatedAtMixin(**created_meal) for created_meal in created_meals]
+            print('in here we created a meal date', created_meal_dates)
             return  created_meal_dates
         return None
         
