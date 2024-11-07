@@ -33,15 +33,15 @@ def run_migrations_online() -> None:
     """
     is_test = os.environ.get("TEST")
     # handle testing config for migrations
-    if is_test:
-        # connect to primary db
-        default_engine = create_engine(str(database_url), isolation_level="AUTOCOMMIT")
-        # drop testing db if it exists and create a fresh one
-        with default_engine.connect() as default_conn:
-            default_conn.execute(
-                f"DROP DATABASE IF EXISTS {app_config.POSTGRES_DB}_test"
-            )
-            default_conn.execute(f"CREATE DATABASE {app_config.POSTGRES_DB}_test")
+    # if is_test:
+    #     # connect to primary db
+    #     default_engine = create_engine(str(test_database_url), isolation_level="AUTOCOMMIT")
+    #     # drop testing db if it exists and create a fresh one
+    #     with default_engine.connect() as default_conn:
+    #         default_conn.execute(
+    #             f"DROP DATABASE IF EXISTS {app_config.POSTGRES_DB}_test"
+    #         )
+    #         default_conn.execute(f"CREATE DATABASE {app_config.POSTGRES_DB}_test")
 
     connectable = config.attributes.get("connection", None)
     config.set_main_option(
