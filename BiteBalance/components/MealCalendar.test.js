@@ -1,7 +1,7 @@
 import React from "react";
 import { render, waitFor, debug } from "@testing-library/react-native";
-import CalendarPage from "./CalendarPage";
-import { fetchMonthMeals } from "../../api/service";
+import MealCalendar from "./MealCalendar";
+import { fetchMonthMeals } from "../api/service";
 
 const successfulEmptyFetchMonthMealsResponse = {};
 
@@ -9,11 +9,11 @@ const succesfullyCurrentDayResponse = {
   "2024-11-07": 3,
 };
 
-jest.mock("../../api/service", () => ({
+jest.mock("../api/service", () => ({
   fetchMonthMeals: jest.fn(),
 }));
 
-describe("Calendar Page", () => {
+describe("MealCalendar Page", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -26,7 +26,7 @@ describe("Calendar Page", () => {
         .mockResolvedValueOnce(successfulEmptyFetchMonthMealsResponse),
     });
 
-    const { getByTestId, findByText } = render(<CalendarPage />);
+    const { findByText } = render(<MealCalendar />);
 
     const currentDate = new Date();
     const currentDateFormatted = currentDate.toISOString().split("T")[0];
@@ -42,7 +42,7 @@ describe("Calendar Page", () => {
       json: jest.fn().mockResolvedValueOnce(succesfullyCurrentDayResponse),
     });
 
-    const { getByTestId, debug } = render(<CalendarPage />);
+    const { getByTestId } = render(<MealCalendar />);
 
     await waitFor(() => {
       const dateWithDots = getByTestId("calendar.day_2024-11-07");
