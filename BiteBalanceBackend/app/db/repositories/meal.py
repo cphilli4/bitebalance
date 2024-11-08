@@ -21,15 +21,22 @@ GET_MEAL_SQL = """
 """
 
 GET_MEAL_DATES_FOR_MONTH_SQL = """
-    SELECT created_at FROM meals WHERE EXTRACT(MONTH FROM created_at) =:month;
+    SELECT created_at 
+    FROM meals 
+    WHERE EXTRACT(MONTH FROM created_at) =:month;
 """
 
 GET_MEAL_FOR_DAY_SQL = """
-    SELECT * FROM meals WHERE created_at::date =:day;
+    SELECT * 
+    FROM meals 
+    WHERE created_at::date =:day;
 """
 
 GET_MEAL_START_END_DATE ="""
-    SELECT created_at FROM meals WHERE created_at >=:start AND created_at <:end;
+    SELECT DATE(created_at) AS date, COUNT(*) AS count 
+    FROM meals 
+    WHERE created_at >=:start AND created_at <:end
+    GROUP BY DATE(created_at);
 """
 
 class MealRepository(BaseRepository):
@@ -74,8 +81,9 @@ class MealRepository(BaseRepository):
         created_meals = await self.db.fetch_all(
             query=GET_MEAL_START_END_DATE, values=query_value
         )
-        
+        print('meals', created_meals)
         if created_meals: 
-            created_meal_dates = [CreatedAtMixin(**created_meal) for created_meal in created_meals]
+            created_meal_dates = {created_meal["date"]: created_meal["count"] for created_meal in created_meals}
+            print('created meals dates', created_meal_dates)
             return  created_meal_dates
         return None

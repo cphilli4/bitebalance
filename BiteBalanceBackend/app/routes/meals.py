@@ -1,9 +1,5 @@
-<<<<<<< HEAD
-from typing import Any, Optional
-=======
 from datetime import date
-from typing import Any, List, Optional
->>>>>>> backend_python
+from typing import Any, List, Dict, Optional
 
 from fastapi import APIRouter, Depends, Request,File, UploadFile, Form, Query
 
@@ -84,6 +80,6 @@ async def meals_date_start_end(
     meal_repo: MealRepository= Depends(
         get_repository(MealRepository)
     ),
-)->Optional[List[CreatedAtMixin]]:
+)->Optional[Dict[date, int]]:
     
     return await fn_get_meal_start_end_date(start_date, end_date, meal_repo)

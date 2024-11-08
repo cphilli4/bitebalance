@@ -1,11 +1,7 @@
 from collections import Counter
-<<<<<<< HEAD
-from datetime import date, datetime
-=======
-from datetime import date, timedelta
->>>>>>> backend_python
+from datetime import date, timedelta, datetime
 import json
-from typing import List, Optional
+from typing import List, Dict, Optional
 
 from fastapi import UploadFile
 
@@ -78,7 +74,7 @@ async def fn_get_meal_day(day: str, meal_repo: MealRepository)->Optional[List[Me
     return await crud.fn_get_meal_day(day, meal_repo)
 
 
-async def fn_get_meal_start_end_date(start: str, end: str , meal_repo: MealRepository)->Optional[List[CreatedAtMixin]]:
+async def fn_get_meal_start_end_date(start: str, end: str , meal_repo: MealRepository)->Optional[Dict[date, int]]:
     try:
         start = date.fromisoformat(start)
         end = date.fromisoformat(end) + timedelta(days=1)
