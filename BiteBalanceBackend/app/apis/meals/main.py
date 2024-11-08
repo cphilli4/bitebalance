@@ -1,13 +1,21 @@
 from collections import Counter
+<<<<<<< HEAD
 from datetime import date, datetime
+=======
+from datetime import date, timedelta
+>>>>>>> backend_python
 import json
+from typing import List, Optional
 
 from fastapi import UploadFile
 
-from app.models.domains.meal import NewMeal
-from app.models.core import IDModelMixin
+from app.models.domains.meal import NewMeal, MealDBModel
+
+from app.models.core import IDModelMixin, CreatedAtMixin
 from app.db.repositories import MealRepository
 from app.utils.s3_bucket_access import upload_meal
+
+from app.models.exceptions.crud_exception import BadRequestException
 
 from . import crud
 
@@ -60,3 +68,22 @@ async def fn_get_meal_dates_month(
         return count_dates
     return {}
 
+
+async def fn_get_meal_day(day: str, meal_repo: MealRepository)->Optional[List[MealDBModel]]:
+    try:
+        day = date.fromisoformat(day)
+    except Exception:
+        raise BadRequestException(message="Date format not supported")
+    
+    return await crud.fn_get_meal_day(day, meal_repo)
+
+
+async def fn_get_meal_start_end_date(start: str, end: str , meal_repo: MealRepository)->Optional[List[CreatedAtMixin]]:
+    try:
+        start = date.fromisoformat(start)
+        end = date.fromisoformat(end) + timedelta(days=1)
+    except Exception:
+        raise BadRequestException(message="Date format not supported")
+    
+    return await crud.fn_get_meal_start_end_date(start, end, meal_repo)
+    

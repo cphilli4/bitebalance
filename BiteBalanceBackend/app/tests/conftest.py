@@ -58,30 +58,6 @@ def apply_migrations():
 @pytest_asyncio.fixture(scope="function")
 async def app(apply_migrations: None) -> FastAPI:
     from app.main import app
-    db_username, db_password = (app_config.POSTGRES_USER, app_config.POSTGRES_PASSWORD)
-    database_url = (
-        f"postgresql+asyncpg://{db_username}:{db_password}@{app_config.POSTGRES_SERVER}"
-        f":{app_config.POSTGRES_PORT}/{app_config.POSTGRES_DB}_test"
-    )
-    logger.info(
-            "  ---------- STARTING APP IN TEST MODE -----------------{}".format(str(app.state))
-        )
-    logger.info(
-            "--- DB CONNECTION database_url TO {}---".format(database_url)
-        )
-    database = Database(
-        database_url, min_size=2, max_size=10
-    )  # these can be app_configured in app_config as well
-    try:
-        await database.connect()
-        app.state.db = database
-        logger.info(
-            "--- DB CONNECTION ESTABLISHED TO {}---".format(app_config.POSTGRES_SERVER)
-        )
-    except Exception as e:
-        logger.warning("--- DB CONNECTION ERROR ---")
-        logger.warning(e)
-        logger.warning("--- DB CONNECTION ERROR ---")
     return app
 
 

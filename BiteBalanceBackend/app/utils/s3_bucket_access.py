@@ -1,5 +1,5 @@
 from loguru import logger
-from datetime import datetime 
+from datetime import datetime
 
 import boto3
 from fastapi import FastAPI, UploadFile, File, HTTPException
@@ -17,10 +17,8 @@ object_key = 'example-folder/specific-object.jpg'  # The specific object path in
 
 def process_upload_time()->str:
     # Smelly code, needs refactoring
-    current_time = str(datetime.now()).replace(' ', '-').replace(':', '-')
-    current_time = current_time.split('.')
-    current_time = current_time[0]
-    
+    today = datetime.today()
+    current_time = f"{today.year}-{today.month}-{today.day}-{today.hour}-{today.minute}-{today.second}"
     return current_time
 
 
