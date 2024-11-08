@@ -21,11 +21,11 @@ async def connect_to_db(app: FastAPI) -> None:
         f"postgresql+asyncpg://{db_username}:{db_password}@{app_config.POSTGRES_SERVER}"
         f":{app_config.POSTGRES_PORT}/{app_config.POSTGRES_DB}"
     )
-    # if os.environ.get("TEST"):
-    #     database_url += "_test"
-    #     logger.info(
-    #         "--- DB CONNECTION database_url TO {}---".format(database_url)
-    #     )
+    if os.environ.get("TEST"):
+        database_url += "_test"
+        logger.info(
+            "--- DB CONNECTION database_url TO {}---".format(database_url)
+        )
         
     logger.info(
             "--- DB CONNECTION database_url TO {}---".format(database_url)
