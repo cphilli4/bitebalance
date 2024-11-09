@@ -8,6 +8,9 @@ from app.core.global_config import app_config
 
 
 async def connect_to_db(app: FastAPI) -> None:
+    logger.info(
+            "  ---------- RUNNING THE CONNECTING TO DATABASE SECTION -----------------"
+        )
     db_username, db_password = (app_config.POSTGRES_USER, app_config.POSTGRES_PASSWORD)
     # db_username, db_password = (
     #     (app_config.POSTGRES_OP_USER, app_config.POSTGRES_OP_PASSWORD)
@@ -20,7 +23,13 @@ async def connect_to_db(app: FastAPI) -> None:
     )
     if os.environ.get("TEST"):
         database_url += "_test"
-
+        logger.info(
+            "--- DB CONNECTION database_url TO {}---".format(database_url)
+        )
+        
+    logger.info(
+            "--- DB CONNECTION database_url TO {}---".format(database_url)
+        )
     database = Database(
         database_url, min_size=2, max_size=10
     )  # these can be app_configured in app_config as well
