@@ -3,12 +3,6 @@ import base64
 
 from openai import OpenAI
 
-from bitebalance.BiteBalanceBackend.app.tests.test_meal.imageAnalyze import ImageRecipeExtractor
-
-
-def encode_image():
-    with open('./Nutrition Table.png', 'rb') as image:
-        return base64.b64encode(image.read()).decode('utf-8')
 
 
 
