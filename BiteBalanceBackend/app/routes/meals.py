@@ -1,5 +1,5 @@
 from datetime import date
-from typing import Any, List, Optional
+from typing import Any, List, Dict, Optional
 
 from fastapi import APIRouter, Depends, Request,File, UploadFile, Form, Query
 
@@ -38,19 +38,19 @@ async def upload_meal_with_label(
 
 
 @router.get(
-    "/meal-dates/",
-    tags=["meal_dates"],
-    name="meal_dates:get",
+    "/meal-dates",
+    tags=["meal_date"],
+    name="meal_date:get",
     )
 async def meals_dates(
     request: Request,
+    date: Optional[str] = Query(None, description="Date string in format 'MM-DD-YYYY'"),
     meal_repo: MealRepository= Depends(
         get_repository(MealRepository)
     ),
 )->Any:
     
-    return await fn_get_meal_dates_month(meal_repo)
-
+    return await fn_get_meal_dates_month(date, meal_repo)
 
 @router.get(
     "/day-meals",
@@ -80,6 +80,6 @@ async def meals_date_start_end(
     meal_repo: MealRepository= Depends(
         get_repository(MealRepository)
     ),
-)->Optional[List[CreatedAtMixin]]:
+)->Optional[Dict[date, int]]:
     
     return await fn_get_meal_start_end_date(start_date, end_date, meal_repo)

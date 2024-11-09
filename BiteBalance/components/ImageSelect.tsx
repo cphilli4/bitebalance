@@ -23,6 +23,21 @@ type Props = PropsWithChildren<{
   onClose: () => void;
 }>;
 
+
+// Image Tracking Calendar
+// want to be able to view tracked meals in a calendar view
+  // need calendar component with ability to go forward and backward
+  // want to display meals and progress for every day
+    // show checkmark or x if day is not complete
+  // require uploaded/imported images of meals to have a date
+    // import - metadata from image?
+    // upload - current date
+    // store in database during upload
+// when selected a day in the calendar want to view information for that day
+  // show all meals uploaded for that day
+  // allow for back uploading meals
+  // show information from AI 
+
 function ImageSelectModal({ isVisible, children, onClose }: Props) {
   return (
     <Modal animationType="slide" transparent={true} visible={isVisible}>

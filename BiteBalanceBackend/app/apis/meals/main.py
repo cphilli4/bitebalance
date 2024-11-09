@@ -1,7 +1,7 @@
 from collections import Counter
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 import json
-from typing import List, Optional
+from typing import List, Dict, Optional
 
 from fastapi import UploadFile
 
@@ -43,12 +43,21 @@ async def fn_upload_meal(
     
 
 async def fn_get_meal_dates_month(
+    date: str,
     meal_repo: MealRepository,
 ) -> IDModelMixin:
     
-    today_month = date.today().month
+    # TODO: handle validation of date
+    print("month", date)
+    # get month from string
+    try:
+        month = datetime.strptime(date, "%m-%d-%Y").month
+    except ValueError:
+        print("invalid date format, Use 'MM-DD-YYYY'")
     
-    dates = await crud.fn_get_meal_dates_month(today_month, meal_repo)
+    # today_month = date.today().month
+    
+    dates = await crud.fn_get_meal_dates_month(month, meal_repo)
     if dates :
         dates_list = [ f"{data.created_at.year}-{data.created_at.month}-{data.created_at.day}"  for data in dates ]
         count_dates = Counter(dates_list)  # Count occurrences of each date
@@ -65,7 +74,7 @@ async def fn_get_meal_day(day: str, meal_repo: MealRepository)->Optional[List[Me
     return await crud.fn_get_meal_day(day, meal_repo)
 
 
-async def fn_get_meal_start_end_date(start: str, end: str , meal_repo: MealRepository)->Optional[List[CreatedAtMixin]]:
+async def fn_get_meal_start_end_date(start: str, end: str , meal_repo: MealRepository)->Optional[Dict[date, int]]:
     try:
         start = date.fromisoformat(start)
         end = date.fromisoformat(end) + timedelta(days=1)
