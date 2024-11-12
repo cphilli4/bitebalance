@@ -2,6 +2,7 @@ import json
 
 from datetime import datetime
 from typing import Any, Optional
+from uuid import UUID
 
 # from humps import camelize
 from pydantic import BaseModel
@@ -10,11 +11,11 @@ from pydantic import BaseModel
 class CoreModel(BaseModel):
     class Config:
         # alias_generator = camelize
-        allow_population_by_field_name = True
+        populate_by_name= True
 
 
 class IDModelMixin(CoreModel):
-    id: Optional[int] = None
+    id: Optional[UUID] = None
 
     # For Deduplication
     def __eq__(self, other):

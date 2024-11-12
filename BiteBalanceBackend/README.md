@@ -37,6 +37,32 @@ port conflicts ?
 
 unable to start container process: exec: "./entrypoint.sh" 
 > chmod +x ./entrypoint.sh
+> chmod +x ./db-init.sh
 ```
 
 Then open `http://localhost:<port_defined_in_env>/api/docs`
+
+#### Create a table in the database:
+```bash
+> alembic -c app/alembic.ini revision -m "create table_name table"
+> make migrate
+```
+
+#### Databse operations:
+```bash
+> docker exec -it bitebalancebackend-db-1 psql -U postgres -d bitebalance
+> \dt
+> SELECT * FROM meals;
+```
+
+#### Run test scripts:
+```bash
+> chmod +x ./db-init.sh
+> make devtest
+```
+
+#### Rebuild all docker images and remove existing volume to start afresh
+```bash
+    Navigate to BiteBalanceBackend directory
+> docker-compose down -v
+```

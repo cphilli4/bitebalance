@@ -15,6 +15,8 @@ from app.logger import setup_logging
 
 from app.modules import application_module, users_module
 
+global consumer
+
 app = FastAPI(
     title="BiteBalance API",
     version=app_config.API_VERSION,
