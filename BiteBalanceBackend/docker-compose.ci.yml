@@ -1,0 +1,56 @@
+version: '3.8'
+services:
+  bitebalancebackend:
+    restart: unless-stopped
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+      labels:
+        - bitebalancebackend
+      args:
+        - stage=${STAGE:-none}
+    environment:
+      - PORT=${{ secrets.PORT }}
+      - APPLICATION_ID=${{ secrets.APPLICATION_ID }}
+      - POSTGRES_USER=${{ secrets.POSTGRES_USER }}
+      - POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+      - POSTGRES_SERVER=${{ secrets.POSTGRES_SERVER }}
+      - POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}
+      - POSTGRES_DB=${{ secrets.POSTGRES_DB }}
+      - POSTGRES_OP_USER=${{ secrets.POSTGRES_OP_USER }}
+      - POSTGRES_OP_PASSWORD=${{ secrets.POSTGRES_OP_PASSWORD }}
+      - AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
+      - AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - AWS_REGION=${{ secrets.AWS_REGION }}
+    volumes:
+      - ./app:/app
+      - ./uploads:/tmp/uploads
+    entrypoint: "./entrypoint.sh"
+    command: "dev"
+    ports:
+      - "${{ secrets.PORT }}:${{ secrets.PORT }}"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:14-alpine
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+      - ./db-init.sh:/docker-entrypoint-initdb.d/db-init.sh
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    environment:
+      - POSTGRES_USER=${{ secrets.POSTGRES_USER }}
+      - POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+      - POSTGRES_DB=${{ secrets.POSTGRES_DB }}
+      - TZ=America/New_York
+    ports:
+      - 5432:5432
+
+volumes:
+  postgres_data:

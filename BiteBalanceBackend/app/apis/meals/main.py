@@ -52,8 +52,8 @@ async def fn_get_meal_dates_month(
     # get month from string
     try:
         month = datetime.strptime(date, "%m-%d-%Y").month
-    except ValueError:
-        print("invalid date format, Use 'MM-DD-YYYY'")
+    except Exception:
+        raise BadRequestException(message="Date format not supported")
     
     # today_month = date.today().month
     
