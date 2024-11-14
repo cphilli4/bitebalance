@@ -9,7 +9,10 @@ from app.models.domains.meal import NewMeal, MealDBModel
 
 from app.models.core import IDModelMixin, CreatedAtMixin
 from app.db.repositories import MealRepository
+
 from app.utils.s3_bucket_access import upload_meal, pre_signed_image_url
+from app.utils.imageAnalyze import ImageRecipeExtractor
+from app.utils.ingredientAnalyze import IngredientRank
 
 from app.models.exceptions.crud_exception import BadRequestException
 
@@ -25,10 +28,13 @@ async def fn_upload_meal(
 ) -> IDModelMixin:
     
     # analyse meal contents here with chatGPT
-    meal_contents = ['avocado', 'brown rice', 'chicken', 'cilantro', 'corn', 'jicama', 'lime', 'tomatoes']
+    recipe_extractor = ImageRecipeExtractor(meal)
+    recipe = recipe_extractor.get_recipe()
+    # form of "ingredient|amount in oz"
+    score = IngredientRank(recipe).rank_ingredients()
     meal_data = {
-        'contents': meal_contents,
-        'nutrition_value': 'nutrition_value',
+        'contents': recipe,
+        'nutrition_value': score
     }
     
     # Save meal on S3 bucket here
