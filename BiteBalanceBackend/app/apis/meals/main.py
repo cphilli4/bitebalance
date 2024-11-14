@@ -68,13 +68,11 @@ async def fn_get_meal_day(day: str, meal_repo: MealRepository)->Optional[List[Me
     try:
         day = date.fromisoformat(day)
         meals = await crud.fn_get_meal_day(day, meal_repo)
-        meals = [meal.model_dump() for meal in meals]
-        for index in range(len(meals)):
-            meals[index]['url'] =  await pre_signed_image_url(meals[index]['url'])
-        return meals
     except Exception:
         raise BadRequestException(message="Date format not supported")
-    
+    for index in range(len(meals)):
+            meals[index].url =  await pre_signed_image_url(meals[index].url)
+    return meals
     
 
 

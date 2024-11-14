@@ -30,9 +30,10 @@ async def test_get_meal_day(
     
     test_results = await FUNCTION_TO_TEST(today, meals_repo)
     
-    meal_labels =  [ test_result['label'] for test_result in test_results]
+    meal_labels =  [ test_result.label for test_result in test_results]
     
     assert isinstance(test_results, Iterable)
+    assert isinstance(test_results[0], MealDBModel)
     assert meals[0] in meal_labels
 
         
