@@ -29,10 +29,11 @@ async def fn_upload_meal(
     # analyse meal contents here with chatGPT
     recipe_extractor = ImageRecipeExtractor(meal)
     recipe = recipe_extractor.get_recipe()
+    # form of "ingredient|amount in oz"
     score = IngredientRank(recipe).rank_ingredients()
     meal_data = {
         'contents': recipe,
-        'nutrition_value': score,
+        'nutrition_value': score
     }
     
     # Save meal on S3 bucket here
