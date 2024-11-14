@@ -9,7 +9,7 @@ from app.models.domains.meal import NewMeal, MealDBModel
 
 from app.models.core import IDModelMixin, CreatedAtMixin
 from app.db.repositories import MealRepository
-from app.utils.s3_bucket_access import upload_meal
+from app.utils.s3_bucket_access import upload_meal, pre_signed_image_url
 
 from app.models.exceptions.crud_exception import BadRequestException
 
@@ -39,7 +39,11 @@ async def fn_upload_meal(
     
     new_meal = NewMeal(label=label, url=meal_url, meal_data=meal_data)
     
-    return await crud.fn_upload_meal(new_meal, meal_repo)
+    meal_db_data = await crud.fn_upload_meal(new_meal, meal_repo)
+    meal_db_data = meal_db_data.model_dump()
+    meal_db_data['url'] = await pre_signed_image_url(meal_url)
+    
+    return meal_db_data
     
 
 async def fn_get_meal_dates_month(
@@ -47,15 +51,10 @@ async def fn_get_meal_dates_month(
     meal_repo: MealRepository,
 ) -> IDModelMixin:
     
-    # TODO: handle validation of date
-    print("month", date)
-    # get month from string
     try:
         month = datetime.strptime(date, "%m-%d-%Y").month
     except Exception:
         raise BadRequestException(message="Date format not supported")
-    
-    # today_month = date.today().month
     
     dates = await crud.fn_get_meal_dates_month(month, meal_repo)
     if dates :
@@ -68,10 +67,15 @@ async def fn_get_meal_dates_month(
 async def fn_get_meal_day(day: str, meal_repo: MealRepository)->Optional[List[MealDBModel]]:
     try:
         day = date.fromisoformat(day)
+        meals = await crud.fn_get_meal_day(day, meal_repo)
+        meals = [meal.model_dump() for meal in meals]
+        for index in range(len(meals)):
+            meals[index]['url'] =  await pre_signed_image_url(meals[index]['url'])
+        return meals
     except Exception:
         raise BadRequestException(message="Date format not supported")
     
-    return await crud.fn_get_meal_day(day, meal_repo)
+    
 
 
 async def fn_get_meal_start_end_date(start: str, end: str , meal_repo: MealRepository)->Optional[Dict[date, int]]:
