@@ -13,7 +13,6 @@ export const uploadImage = async (formData: FormData) => {
         "Content-Type": "multipart/form-data",
       },
     });
-    console.log('inside res', response)
     return response;
   } catch (e) {
     console.log('uploadImage Error', e)
@@ -26,7 +25,6 @@ export const fetchMonthMeals = async (date: string) => {
     const response = await fetch(route, {
       method: "GET",
     });
-    console.log('inside res', response)
     return response;
   } catch (e) {
     console.log('fetchMonthMeals Error', e)
@@ -39,7 +37,6 @@ export const fetchMealsByDates = async (startDate: string, endDate: string) => {
     const response = await fetch(route, {
       method: "GET",
     });
-    console.log('inside res', response)
     return response;
   } catch (e) {
     console.log('fetchMonthMeals Error', e)
@@ -52,7 +49,6 @@ export const fetchMealsByDay = async (day: string) => {
     const response = await fetch(route, {
       method: "GET",
     });
-    console.log('inside res', response)
     return response;
   } catch (e) {
     console.log('fetchMonthMeals Error', e)
