@@ -12,7 +12,6 @@ s3_client = boto3.client('s3')
 
 # Define the bucket name, object key (path), and local file path
 BUCKET_NAME = 'bitebalances3bucket'
-object_key = 'example-folder/specific-object.jpg'  # The specific object path in the policy
 
 
 def process_upload_time()->str:
@@ -32,9 +31,7 @@ async def upload_meal(meal:UploadFile = File(...)) -> str:
     try: 
         s3_client.put_object(Bucket=BUCKET_NAME, Key=object_key, Body=file_content)
 
-        logger.info(
-                "--- IMAGE uploaded to {}/{}---".format(BUCKET_NAME, object_key)
-            )
+        return object_key
     
     except ClientError as e:
         # Handle S3 errors (like permission issues)
@@ -43,5 +40,16 @@ async def upload_meal(meal:UploadFile = File(...)) -> str:
         # Handle general errors
         raise HTTPException(status_code=500, detail=f"An error occurred: {e}")
     
-    
-    return f"{BUCKET_NAME}/{object_key}"
+
+
+async def pre_signed_image_url(image_key: str):
+    try:
+        # Generate a pre-signed URL for the image
+        url = s3_client.generate_presigned_url(
+            'get_object',
+            Params={'Bucket': BUCKET_NAME, 'Key': image_key},
+            ExpiresIn=3600  # URL expires in 1 hour
+        )
+        return str(url)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"An error occurred: {e}")

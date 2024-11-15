@@ -60,7 +60,6 @@ class MealRepository(BaseRepository):
         
         if created_meals: 
             created_meal_dates = [CreatedAtMixin(**created_meal) for created_meal in created_meals]
-            print('in here we created a meal date', created_meal_dates)
             return  created_meal_dates
         return None
         
@@ -81,7 +80,7 @@ class MealRepository(BaseRepository):
         created_meals = await self.db.fetch_all(
             query=GET_MEAL_START_END_DATE, values=query_value
         )
-        print('meals', created_meals)
+
         if created_meals: 
             created_meal_dates = {created_meal["date"]: created_meal["count"] for created_meal in created_meals}
             print('created meals dates', created_meal_dates)

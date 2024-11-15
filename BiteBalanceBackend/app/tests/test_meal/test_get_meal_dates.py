@@ -1,5 +1,5 @@
 from collections.abc import Iterable
-from datetime import date
+from datetime import date, datetime
 
 import pytest
 from fastapi import FastAPI
@@ -23,7 +23,9 @@ async def test_get_meal_dates(
 ) -> None:
     meals = ["chicken with salad", "Rice with turkey", "Halal food"]
     _ = await upload_meals(meals, meals_repo)
-    test_results = await FUNCTION_TO_TEST(meals_repo)
+    today = datetime.today()
+    formatted_date = today.strftime("%m-%d-%Y")
+    test_results = await FUNCTION_TO_TEST(formatted_date, meals_repo)
     
     today = f"{date.today().year}-{date.today().month}-{date.today().day}"
     

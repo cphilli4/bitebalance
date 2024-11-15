@@ -17,7 +17,7 @@ FUNCTION_TO_TEST = fn_get_meal_day
 
 
 @pytest.mark.asyncio
-async def test_get_meal_start_end_date( 
+async def test_get_meal_day( 
     app: FastAPI, 
     platform_client: AsyncClient, 
     meals_repo: MealRepository,

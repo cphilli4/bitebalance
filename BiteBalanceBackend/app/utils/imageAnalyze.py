@@ -3,13 +3,12 @@ from openai import OpenAI
 
 
 class ImageRecipeExtractor:
-    def __init__(self, image_path):
-        self.image_path = image_path
+    def __init__(self, image):
+        self.image = image
         self.client = OpenAI()
 
     def encode_image(self):
-        with open(self.image_path, 'rb') as image:
-            return base64.b64encode(image.read()).decode('utf-8')
+        return base64.b64encode(self.image.read()).decode('utf-8')
 
     def get_recipe(self):
         try:
@@ -28,7 +27,7 @@ class ImageRecipeExtractor:
                                 "Don't respond with plurals."},
 
                             {"type": "image_url",
-                             "image_url": {"url": f"data:image/jpeg;base64,{self.encode_image()}"}},
+                              "image_url": {"url": f"data:image/jpeg;base64,{self.encode_image()}"}}
                         ],
                     }
                 ],

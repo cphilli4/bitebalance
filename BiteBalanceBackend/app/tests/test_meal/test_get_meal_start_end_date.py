@@ -32,15 +32,15 @@ async def test_get_meal_start_end_date(
     
     test_results = await FUNCTION_TO_TEST(yesterday, today, meals_repo)
     
-    datetime_list =  [ test_result.created_at for test_result in test_results]
+    # datetime_list =  [ test_result.created_at for test_result in test_results]
     
-    date_list = [ f"{date.year}-{date.month}-{date.day}" for date in datetime_list]
+    # date_list = [ f"{date.year}-{date.month}-{date.day}" for date in datetime_list]
     
     today = date.today()
-    today = f"{today.year}-{today.month}-{today.day}" 
+    # today = f"{today.year}-{today.month}-{today.day}" 
     
     assert isinstance(test_results, Iterable)
-    assert today in date_list
+    assert today in test_results
 
         
 
