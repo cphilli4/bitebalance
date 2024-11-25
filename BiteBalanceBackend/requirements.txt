@@ -4,6 +4,7 @@
 #
 #    pip-compile --output-file=requirements.txt requirements.in
 #
+openai
 alembic==1.13.3
     # via -r requirements.in
 annotated-types==0.7.0

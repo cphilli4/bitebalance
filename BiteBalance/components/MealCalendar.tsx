@@ -12,6 +12,7 @@ import { fetchMealsByDates, fetchMealsByDay } from "@/api/service";
 import { Calendar, DateData } from "react-native-calendars";
 import { MarkedDates } from "react-native-calendars/src/types";
 import Accordion from "react-native-collapsible/Accordion";
+import { Image } from "expo-image";
 
 const formatToYYYYMMDD = (date: Date) => {
   const year = date.getFullYear();
@@ -26,6 +27,9 @@ const formatToMMDDYYYY = (date: Date) => {
   const year = date.getFullYear();
   return `${month}-${day}-${year}`;
 };
+
+const blurhash =
+  "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
 type MealData = {
   created_at: string;
@@ -69,8 +73,9 @@ function MealInfoView({ selectedDate }: { selectedDate: Date }) {
         const response = await fetchMealsByDay(formattedDate);
         if (response) {
           const json = await response.json();
+          console.log("json", json);
           setMealData(json);
-          setActiveSections([0])
+          setActiveSections([0]);
           setIsLoaded(true);
         } else {
           // error handling
@@ -97,8 +102,18 @@ function MealInfoView({ selectedDate }: { selectedDate: Date }) {
     return (
       <View style={styles.mealContentContainer}>
         <View>
+          {/* <Image
+            source="https://picsum.photos/seed/696/3000/2000"
+            contentFit="cover"
+            placeholder={{ blurhash }}
+            style={{
+              width: 100,
+              height: 100
+            }}
+          /> */}
           <Text style={styles.mealContentText}>Contents:</Text>
           <Text>url: {meal.url}</Text>
+          <Image source={meal.url} placeholder={{ blurhash }} style={{width: 100, height: 100}}/>
         </View>
       </View>
     );
@@ -388,7 +403,7 @@ const styles = StyleSheet.create({
   },
   scrollViewContainer: {
     flex: 1,
-    marginTop: 5
+    marginTop: 5,
   },
   mealHeaderContainer: {
     alignItems: "center",
@@ -396,8 +411,8 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     marginHorizontal: 2,
     marginVertical: 8,
-    borderColor: 'black',
-    borderWidth: 1
+    borderColor: "black",
+    borderWidth: 1,
   },
   mealHeaderText: {
     fontSize: 18,
