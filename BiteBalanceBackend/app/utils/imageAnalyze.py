@@ -35,4 +35,4 @@ class ImageRecipeExtractor:
             )
             return sorted(completion.choices[0].message.content.split(", "))
         except Exception as e:
-            return "API Error"
+            return "API Error: {}".format(e)
