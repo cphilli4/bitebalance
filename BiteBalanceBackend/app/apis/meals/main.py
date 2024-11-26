@@ -28,7 +28,8 @@ async def fn_upload_meal(
 ) -> IDModelMixin:
     
     # analyse meal contents here with chatGPT
-    recipe_extractor = ImageRecipeExtractor(meal)
+    meal_image = await meal.read()
+    recipe_extractor = ImageRecipeExtractor(meal_image)
     recipe = recipe_extractor.get_recipe()
     # form of "ingredient|amount in oz"
     score = IngredientRank(recipe).rank_ingredients()
