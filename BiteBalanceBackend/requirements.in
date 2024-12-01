@@ -33,3 +33,5 @@ frozendict
 boto3
 
 jinja2
+
+openai

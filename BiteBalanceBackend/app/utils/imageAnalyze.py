@@ -8,7 +8,7 @@ class ImageRecipeExtractor:
         self.client = OpenAI()
 
     def encode_image(self):
-        return base64.b64encode(self.image.read()).decode('utf-8')
+        return base64.b64encode(self.image).decode('utf-8')
 
     def get_recipe(self):
         try:
@@ -35,4 +35,4 @@ class ImageRecipeExtractor:
             )
             return sorted(completion.choices[0].message.content.split(", "))
         except Exception as e:
-            return "API Error"
+            return "API Error: {}".format(e)
