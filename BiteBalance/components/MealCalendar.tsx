@@ -299,6 +299,29 @@ export default function MealCalendar() {
         }
         onPressArrowLeft={handleArrowLeft}
         onPressArrowRight={handleArrowRight}
+        theme={{
+          calendarBackground: "#fff",
+          textSectionTitleColor: "#4682b4",
+          textSectionTitleDisabledColor: "#b0c4de",
+          selectedDayBackgroundColor: "#999",
+          todayTextColor: "#1e90ff",
+          dayTextColor: "#2f4f4f",
+          selectedDayTextColor: "#ffffff",
+          textDisabledColor: "#d3d3d3",
+          dotColor: "#1e90ff",
+          selectedDotColor: "#ffffff",
+          arrowColor: "#4682b4",
+          disabledArrowColor: "#b0c4de",
+          monthTextColor: "#2f4f4f",
+          indicatorColor: "#1e90ff",
+          textDayFontFamily: "Helvetica",
+          textMonthFontFamily: "Helvetica-Bold",
+          textDayHeaderFontFamily: "Helvetica-Bold",
+          textDayFontSize: 18,
+          textMonthFontSize: 22,
+          textDayHeaderFontSize: 15,
+        }}
+        style={styles.calendar}
       />
       <View>
         <Text testID="date-text">
@@ -310,4 +333,12 @@ export default function MealCalendar() {
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  calendar: {
+    elevation: 5,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  }
+});
