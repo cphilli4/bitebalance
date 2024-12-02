@@ -281,7 +281,7 @@ export default function MealCalendar() {
   };
 
   return (
-    <View>
+    <View style={styles.container}>
       <Calendar
         maxDate={currentDate.toISOString().split("T")[0]}
         onDayPress={(day) => {
@@ -315,8 +315,8 @@ export default function MealCalendar() {
           monthTextColor: "#2f4f4f",
           indicatorColor: "#1e90ff",
           textDayFontFamily: "Helvetica",
-          textMonthFontFamily: "Helvetica-Bold",
-          textDayHeaderFontFamily: "Helvetica-Bold",
+          textMonthFontFamily: "Helvetica",
+          textDayHeaderFontFamily: "Helvetica",
           textDayFontSize: 18,
           textMonthFontSize: 22,
           textDayHeaderFontSize: 15,
@@ -334,6 +334,10 @@ export default function MealCalendar() {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
   calendar: {
     elevation: 5,
     shadowColor: "#000",
