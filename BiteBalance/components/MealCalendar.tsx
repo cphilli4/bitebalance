@@ -73,7 +73,7 @@ function MealInfoView({ selectedDate }: { selectedDate: Date }) {
         const response = await fetchMealsByDay(formattedDate);
         if (response) {
           const json = await response.json();
-          console.log("json", json);
+          console.log('json', json)
           setMealData(json);
           setActiveSections([0]);
           setIsLoaded(true);
