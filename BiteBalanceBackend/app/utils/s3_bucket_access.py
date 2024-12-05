@@ -21,15 +21,15 @@ def process_upload_time()->str:
     return current_time
 
 
-async def upload_meal(meal:UploadFile = File(...)) -> str:
+async def upload_meal(meal, filename) -> str:
     
     uppload_time = process_upload_time()
     # Define the S3 object key (path) where the file will be saved
-    object_key = f"uploads/{uppload_time}/{meal.filename}"
+    object_key = f"uploads/{uppload_time}/{filename}"
     # Read the file contents and upload to S3
-    file_content = await meal.read()
+    
     try: 
-        s3_client.put_object(Bucket=BUCKET_NAME, Key=object_key, Body=file_content)
+        s3_client.put_object(Bucket=BUCKET_NAME, Key=object_key, Body=meal)
 
         return object_key
     
