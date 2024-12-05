@@ -16,21 +16,21 @@ import { ImageSelect } from "@/components/ImageSelect";
 export default function Camera() {
   const [permission, requestPermission] = useCameraPermissions();
 
-  if (!permission) {
-    return <View />;
-  }
+  // if (!permission) {
+  //   return <View />;
+  // }
 
-  if (!permission.granted) {
-    return (
-      // ask for camera permissions
-      <SafeAreaView style={styles.container}>
-        <ThemedView style={styles.grant}>
-          <ThemedText>We need your permission to show the camera</ThemedText>
-          <Button onPress={requestPermission} title="grant permission" />
-        </ThemedView>
-      </SafeAreaView>
-    );
-  }
+  // if (!permission.granted) {
+  //   return (
+  //     // ask for camera permissions
+  //     <SafeAreaView style={styles.container}>
+  //       <ThemedView style={styles.grant}>
+  //         <ThemedText>We need your permission to show the camera</ThemedText>
+  //         <Button onPress={requestPermission} title="grant permission" />
+  //       </ThemedView>
+  //     </SafeAreaView>
+  //   );
+  // }
 
   return (
     <SafeAreaView style={styles.container}>
