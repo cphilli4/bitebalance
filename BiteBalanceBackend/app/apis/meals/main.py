@@ -28,6 +28,7 @@ async def fn_upload_meal(
 ) -> IDModelMixin:
     
     # analyse meal contents here with chatGPT
+    filename = meal.filename
     meal_image = await meal.read()
     recipe_extractor = ImageRecipeExtractor(meal_image)
     recipe = recipe_extractor.get_recipe()
@@ -39,7 +40,7 @@ async def fn_upload_meal(
     }
     
     # Save meal on S3 bucket here
-    meal_url = await upload_meal(meal)
+    meal_url = await upload_meal(meal_image, filename)
     
     # Convert Python dictionary to JSON string
     meal_data = json.dumps(meal_data)
