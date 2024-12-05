@@ -44,7 +44,7 @@ function ImageSelectModal({ isVisible, children, onClose }: Props) {
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
           <View style={styles.titleContainer}>
-            <Text style={styles.title}>Select this Image?</Text>
+            <Text style={styles.title}>Upload this Image?</Text>
             <Pressable onPress={onClose} style={styles.closeButton}>
               <MaterialIcons name="close" color="fff" size={22} />
             </Pressable>
@@ -128,13 +128,14 @@ export function ImageSelect() {
           onClose={() => setShowImageOptions(false)}
         >
           <Image source={{ uri: image!.uri }} style={styles.image} />
-
-          <View style={styles.buttonContainer}>
-            <Pressable onPress={cancelUpload} style={styles.cancelButton}>
-              <Text style={styles.confirmText}>Cancel</Text>
-            </Pressable>
+          <View>
             <Pressable onPress={uploadPhoto} style={styles.confirmButton}>
               <Text style={styles.confirmText}>Confirm</Text>
+            </Pressable>
+          </View>
+          <View>
+            <Pressable onPress={cancelUpload} style={styles.cancelButton}>
+              <Text style={styles.confirmText}>Cancel</Text>
             </Pressable>
           </View>
         </ImageSelectModal>
@@ -146,6 +147,9 @@ export function ImageSelect() {
 
       <TouchableOpacity style={styles.iconButton} onPress={selectImage} testID="image-select-button">
         <FontAwesome name="image" size={55} color="black" />
+          <View style={styles.iconTextContainer}>
+            <Text style={styles.iconText}>Select Image</Text>
+          </View>
       </TouchableOpacity>
     </>
   );
@@ -155,81 +159,95 @@ const styles = StyleSheet.create({
   image: {
     width: 250,
     height: 250,
-    borderRadius: 10,
-    flexGrow: 1,
+    borderRadius: 15,
+    marginBottom: 20,
   },
   iconButton: {
     position: "absolute",
     bottom: 30,
     left: 30,
     backgroundColor: "white",
+    padding: 15,
+    borderRadius: 50,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  iconTextContainer: {
+    flexDirection: "row",
+    marginLeft: 15,
+    alignItems: "center",
+  },
+  iconText: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "black",
+    marginRight: 5,
   },
   modalContainer: {
-    height: "100%",
-    width: "100%",
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
   },
   modalContent: {
-    height: "75%",
-    width: "75%",
-    borderRadius: 25,
-    padding: 10,
-    backgroundColor: "grey",
+    width: "80%",
+    borderRadius: 20,
+    padding: 20,
+    backgroundColor: "#f7f7f7",
+    alignItems: "center",
   },
   titleContainer: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 20,
+    width: "100%",
+    marginBottom: 15,
   },
   title: {
-    fontSize: 22,
+    fontSize: 20,
+    fontWeight: "600",
+    color: "#1e3a5f",
   },
   closeButton: {
-    alignItems: "center",
+    backgroundColor: "#d1d5db",
+    padding: 8,
+    borderRadius: 20,
   },
-  childrenContainer: {
+  confirmButton: {
+    backgroundColor: "#2563eb",
+    padding: 10,
+    borderRadius: 10,
+    alignItems: "center",
+    margin: 5,
+  },
+  cancelButton: {
+    backgroundColor: "#d14343",
+    padding: 10,
+    borderRadius: 10,
+    alignItems: "center",
+    margin: 5,
+  },
+  confirmText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "white",
+  },
+  successContainer: {
+    width: "60%",
+    height: "20%",
+    borderRadius: 20,
+    backgroundColor: "#34d399",
     alignItems: "center",
     justifyContent: "center",
   },
-  confirmButton: {
-    borderWidth: 2,
-    borderColor: "green",
-    backgroundColor: "green",
-    padding: 4,
-    borderRadius: 4,
-    paddingHorizontal: 6,
-  },
-  cancelButton: {
-    borderWidth: 2,
-    borderColor: "red",
-    padding: 4,
-    borderRadius: 4,
-    paddingHorizontal: 6,
-  },
-  buttonContainer: {
-    marginTop: 250,
-    paddingHorizontal: 15,
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  successContainer: {
-    width: "50%",
-    height: "20%",
-    borderRadius: 20,
-    padding: 10,
-    backgroundColor: "green",
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
   successText: {
-    fontSize: 20,
-    color: 'white',
-    fontWeight: 'bold'
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "white",
   },
   confirmText: {
     color: 'white'

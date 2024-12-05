@@ -73,7 +73,7 @@ function MealInfoView({ selectedDate }: { selectedDate: Date }) {
         const response = await fetchMealsByDay(formattedDate);
         if (response) {
           const json = await response.json();
-          console.log('json', json)
+          console.log("json", json);
           setMealData(json);
           setActiveSections([0]);
           setIsLoaded(true);
@@ -112,8 +112,23 @@ function MealInfoView({ selectedDate }: { selectedDate: Date }) {
             }}
           /> */}
           <Text style={styles.mealContentText}>Contents:</Text>
-          <Text>url: {meal.url}</Text>
-          <Image source={meal.url} placeholder={{ blurhash }} style={{width: 100, height: 100}}/>
+          {meal.meal_data.contents.map((contentItem, index) => {
+            const contentInfo = contentItem.split("|");
+            return (
+              <View key={index} style={styles.contentContainer}>
+                <Text>{contentInfo[0]}</Text>
+                <Text>Amount: {contentInfo[1]}</Text>
+              </View>
+            );
+          })}
+          <Text style={styles.nutritionValueText}>Nutritional Value: {meal.meal_data.nutrition_value}/100</Text>
+          <View style={styles.imageContainer}>
+            <Image
+              source={meal.url}
+              placeholder={{ blurhash }}
+              style={{ width: 200, height: 200 }}
+            />
+          </View>
         </View>
       </View>
     );
@@ -358,7 +373,6 @@ export default function MealCalendar() {
 
   return (
     <View style={styles.container}>
-      {/* <View style={styles.calendarContainer}> */}
       <Calendar
         maxDate={currentDate.toISOString().split("T")[0]}
         onDayPress={(day) => {
@@ -375,7 +389,28 @@ export default function MealCalendar() {
         }
         onPressArrowLeft={handleArrowLeft}
         onPressArrowRight={handleArrowRight}
-        style={styles.calendar}
+        theme={{
+          calendarBackground: "#fff",
+          textSectionTitleColor: "#4682b4",
+          textSectionTitleDisabledColor: "#b0c4de",
+          selectedDayBackgroundColor: "#999",
+          todayTextColor: "#1e90ff",
+          dayTextColor: "#2f4f4f",
+          selectedDayTextColor: "#ffffff",
+          textDisabledColor: "#d3d3d3",
+          dotColor: "#1e90ff",
+          selectedDotColor: "#ffffff",
+          arrowColor: "#4682b4",
+          disabledArrowColor: "#b0c4de",
+          monthTextColor: "#2f4f4f",
+          indicatorColor: "#1e90ff",
+          textDayFontFamily: "Helvetica",
+          textMonthFontFamily: "Helvetica",
+          textDayHeaderFontFamily: "Helvetica",
+          textDayFontSize: 18,
+          textMonthFontSize: 22,
+          textDayHeaderFontSize: 15,
+        }}
       />
       {/* </View> */}
       <View style={styles.mealInfoContainer}>
@@ -426,6 +461,24 @@ const styles = StyleSheet.create({
   noImagesText: {
     fontSize: 22,
   },
-  mealContentContainer: {},
-  mealContentText: {},
+  imageContainer: {
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
+  },
+  contentContainer: {
+    marginHorizontal: 10,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  mealContentContainer: {
+    marginHorizontal: 10
+  },
+  mealContentText: {
+    marginBottom: 4
+  },
+  nutritionValueText: {
+    marginVertical: 10
+  }
 });
