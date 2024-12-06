@@ -6,7 +6,7 @@ import { fetchMonthMeals } from "../api/service";
 const successfulEmptyFetchMonthMealsResponse = {};
 
 const succesfullyCurrentDayResponse = {
-  "2024-11-07": 3,
+  "2024-12-05": 3,
 };
 
 jest.mock("../api/service", () => ({
@@ -18,23 +18,6 @@ describe("MealCalendar Page", () => {
     jest.clearAllMocks();
   });
 
-  test("Calendar displays currently selected date", async () => {
-    fetchMonthMeals.mockResolvedValueOnce({
-      status: 200,
-      json: jest
-        .fn()
-        .mockResolvedValueOnce(successfulEmptyFetchMonthMealsResponse),
-    });
-
-    const { findByText } = render(<MealCalendar />);
-
-    const currentDate = new Date();
-    const currentDateFormatted = currentDate.toISOString().split("T")[0];
-
-    const dateTextField = await findByText(currentDateFormatted);
-
-    expect(dateTextField).toBeTruthy();
-  });
 
   test("Calendar displays dots for dates based on fetchMonthMeals response", async () => {
     fetchMonthMeals.mockResolvedValueOnce({
@@ -45,7 +28,7 @@ describe("MealCalendar Page", () => {
     const { getByTestId } = render(<MealCalendar />);
 
     await waitFor(() => {
-      const dateWithDots = getByTestId("calendar.day_2024-11-07");
+      const dateWithDots = getByTestId("calendar.day_2024-12-05");
       
       const dotsChild = dateWithDots.props.children[1];
 

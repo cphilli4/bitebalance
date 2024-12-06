@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { Button, Image, View, Text, StyleSheet, SafeAreaView } from "react-native";
+import {
+  Button,
+  Image,
+  View,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+} from "react-native";
 import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 
 import { ThemedText } from "@/components/ThemedText";
@@ -16,9 +23,12 @@ export default function Camera() {
   // if (!permission.granted) {
   //   return (
   //     // ask for camera permissions
-  //     <ThemedView>
-  //       <ThemedText>Give permission</ThemedText>
-  //     </ThemedView>
+  //     <SafeAreaView style={styles.container}>
+  //       <ThemedView style={styles.grant}>
+  //         <ThemedText>We need your permission to show the camera</ThemedText>
+  //         <Button onPress={requestPermission} title="grant permission" />
+  //       </ThemedView>
+  //     </SafeAreaView>
   //   );
   // }
 
@@ -33,10 +43,15 @@ export default function Camera() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   camera: {
     flex: 1,
-    backgroundColor: 'white'
+    backgroundColor: "white",
   },
+  grant: {
+    alignContent: 'center',
+    justifyContent: 'center',
+    flex: 1
+  }
 });

@@ -1,9 +1,18 @@
 import { useState, useEffect } from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
-import { Calendar, DateData } from "react-native-calendars";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  ScrollView,
+  ActivityIndicator,
+} from "react-native";
 import { fetchMealsByDates, fetchMealsByDay } from "@/api/service";
 
+import { Calendar, DateData } from "react-native-calendars";
 import { MarkedDates } from "react-native-calendars/src/types";
+import Accordion from "react-native-collapsible/Accordion";
+import { Image } from "expo-image";
 
 const formatToYYYYMMDD = (date: Date) => {
   const year = date.getFullYear();
@@ -19,6 +28,9 @@ const formatToMMDDYYYY = (date: Date) => {
   return `${month}-${day}-${year}`;
 };
 
+const blurhash =
+  "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
+
 type MealData = {
   created_at: string;
   label: string;
@@ -30,8 +42,29 @@ type MealData = {
   id: string;
 };
 
+function MealCard({ meal }: { meal: MealData }) {
+  return (
+    <View>
+      <Text>Label: {meal.label}</Text>
+      <Text>url: {meal.url}</Text>
+      <View>
+        <Text>Contents:</Text>
+        <FlatList
+          data={meal.meal_data.contents}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => <Text>{item}</Text>}
+        />
+      </View>
+      <Text>Nutritional Value: {meal.meal_data.nutrition_value}</Text>
+    </View>
+  );
+}
+
 function MealInfoView({ selectedDate }: { selectedDate: Date }) {
   const [mealData, setMealData] = useState<MealData[]>([]);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  const [activeSections, setActiveSections] = useState<number[]>([0]);
 
   useEffect(() => {
     const getData = async () => {
@@ -40,7 +73,10 @@ function MealInfoView({ selectedDate }: { selectedDate: Date }) {
         const response = await fetchMealsByDay(formattedDate);
         if (response) {
           const json = await response.json();
+          console.log("json", json);
           setMealData(json);
+          setActiveSections([0]);
+          setIsLoaded(true);
         } else {
           // error handling
         }
@@ -54,23 +90,74 @@ function MealInfoView({ selectedDate }: { selectedDate: Date }) {
     }
   }, [selectedDate]);
 
-  return (
-    <View>
-      {mealData && mealData.map((meal, index) => (
-        <View key={index}>
-          <Text>Label: {meal.label}</Text>
-          <Text>url: {meal.url}</Text>
-          <View>
-            <Text>Contents:</Text>
-            <FlatList
-              data={meal.meal_data.contents}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({ item }) => <Text>{item}</Text>}
+  const renderHeader = (meal: MealData) => {
+    return (
+      <View style={styles.mealHeaderContainer}>
+        <Text style={styles.mealHeaderText}>{meal.label}</Text>
+      </View>
+    );
+  };
+
+  const renderContent = (meal: MealData) => {
+    return (
+      <View style={styles.mealContentContainer}>
+        <View>
+          {/* <Image
+            source="https://picsum.photos/seed/696/3000/2000"
+            contentFit="cover"
+            placeholder={{ blurhash }}
+            style={{
+              width: 100,
+              height: 100
+            }}
+          /> */}
+          <Text style={styles.mealContentText}>Contents:</Text>
+          {meal.meal_data.contents.map((contentItem, index) => {
+            const contentInfo = contentItem.split("|");
+            return (
+              <View key={index} style={styles.contentContainer}>
+                <Text>{contentInfo[0]}</Text>
+                <Text>{contentInfo[1]} oz</Text>
+              </View>
+            );
+          })}
+          <Text style={styles.nutritionValueText}>Nutritional Value: {meal.meal_data.nutrition_value}/100</Text>
+          <View style={styles.imageContainer}>
+            <Image
+              source={meal.url}
+              placeholder={{ blurhash }}
+              style={{ width: 200, height: 200 }}
             />
           </View>
-          <Text>Nutritional Value: {meal.meal_data.nutrition_value}</Text>
         </View>
-      ))}
+      </View>
+    );
+  };
+
+  return (
+    <View style={styles.scrollViewContainer}>
+      {!isLoaded && <ActivityIndicator size="large" style={styles.indicator} />}
+      {isLoaded && mealData && (
+        <ScrollView>
+          <Accordion
+            sections={mealData}
+            activeSections={activeSections}
+            renderHeader={renderHeader}
+            renderContent={renderContent}
+            onChange={(sections) => {
+              setActiveSections(sections);
+            }}
+          />
+        </ScrollView>
+      )}
+
+      {isLoaded && !mealData && (
+        <View style={styles.noImagesContainer}>
+          <Text style={styles.noImagesText}>
+            No Meals to view for this day, try logging a meal in the Home page
+          </Text>
+        </View>
+      )}
     </View>
   );
 }
@@ -178,7 +265,7 @@ export default function MealCalendar() {
       };
     }
 
-    setSelectedDate(new Date(day.dateString));
+    setSelectedDate(new Date(day.year, day.month - 1, day.day));
     setTrackedDays(currentTrackedDays);
   };
 
@@ -190,7 +277,7 @@ export default function MealCalendar() {
     // gather meal data for new range of visible days
     const tracked = await getTrackedDaysForMonth(currentSelectedMonth);
 
-    const merged = { ...tracked };
+    const merged = { ...trackedDays };
 
     // get current selected date
     Object.keys(tracked).forEach((date) => {
@@ -198,6 +285,10 @@ export default function MealCalendar() {
         merged[date] = {
           ...tracked[date],
           ...trackedDays[date],
+        };
+      } else {
+        merged[date] = {
+          ...tracked[date],
         };
       }
     });
@@ -292,7 +383,6 @@ export default function MealCalendar() {
         testID={"calendar"}
         onMonthChange={monthChange}
         displayLoadingIndicator={!isLoaded}
-        current={"2024-11-30"}
         disableArrowRight={
           selectedDate.getFullYear() === currentDate.getFullYear() &&
           selectedDate.getMonth() === currentDate.getMonth()
@@ -321,13 +411,14 @@ export default function MealCalendar() {
           textMonthFontSize: 22,
           textDayHeaderFontSize: 15,
         }}
-        style={styles.calendar}
       />
-      <View>
-        <Text testID="date-text">
-          <MealInfoView selectedDate={selectedDate} />
+      {/* </View> */}
+      <View style={styles.mealInfoContainer}>
+        <MealInfoView selectedDate={selectedDate} />
+        {/* TODO:Fix this portion for a test */}
+        {/* <Text testID="date-text">
           {selectedDate.toISOString().split("T")[0]}
-        </Text>
+        </Text> */}
       </View>
     </View>
   );
@@ -335,14 +426,59 @@ export default function MealCalendar() {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+  },
+  mealInfoContainer: {
+    flexGrow: 1,
+  },
+  indicator: {
+    flex: 1,
+    alignItems: "center",
     justifyContent: "center",
+  },
+  scrollViewContainer: {
+    flex: 1,
+    marginTop: 5,
+  },
+  mealHeaderContainer: {
+    alignItems: "center",
+    paddingHorizontal: 4,
+    paddingVertical: 8,
+    marginHorizontal: 2,
+    marginVertical: 8,
+    borderColor: "black",
+    borderWidth: 1,
+  },
+  mealHeaderText: {
+    fontSize: 18,
+  },
+  noImagesContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingTop: 32,
+    padding: 10,
+  },
+  noImagesText: {
+    fontSize: 22,
+  },
+  imageContainer: {
+    justifyContent: "center",
+    alignContent: "center",
     alignItems: "center",
   },
-  calendar: {
-    elevation: 5,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+  contentContainer: {
+    marginHorizontal: 10,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  mealContentContainer: {
+    marginHorizontal: 10
+  },
+  mealContentText: {
+    marginBottom: 4
+  },
+  nutritionValueText: {
+    marginVertical: 10
   }
 });

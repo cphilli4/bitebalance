@@ -28,6 +28,7 @@ async def fn_upload_meal(
 ) -> IDModelMixin:
     
     # analyse meal contents here with chatGPT
+    filename = meal.filename
     meal_image = await meal.read()
     recipe_extractor = ImageRecipeExtractor(meal_image)
     recipe = recipe_extractor.get_recipe()
@@ -39,7 +40,7 @@ async def fn_upload_meal(
     }
     
     # Save meal on S3 bucket here
-    meal_url = await upload_meal(meal)
+    meal_url = await upload_meal(meal_image, filename)
     
     # Convert Python dictionary to JSON string
     meal_data = json.dumps(meal_data)
@@ -77,9 +78,11 @@ async def fn_get_meal_day(day: str, meal_repo: MealRepository)->Optional[List[Me
         meals = await crud.fn_get_meal_day(day, meal_repo)
     except Exception:
         raise BadRequestException(message="Date format not supported")
-    for index in range(len(meals)):
+    if meals:
+        for index in range(len(meals)):
             meals[index].url =  await pre_signed_image_url(meals[index].url)
-    return meals
+        return meals
+    return []
     
 
 
