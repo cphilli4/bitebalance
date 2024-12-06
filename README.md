@@ -16,12 +16,12 @@ The Diet Analyzer is an AI-powered dietary analysis application tailored to enha
 ---
 ## **Core Functionality Sequence Diagram**  
 
-![Sequence Diagram for dietary analysis](#) (![./imges/Sequence-diagram.jpg](https://github.com/cphilli4/bitebalance/blob/main/images/Sequence-diagram.jpg))
+![Sequence Diagram for dietary analysis](#) ![./imges/Sequence-diagram.jpg](https://github.com/cphilli4/bitebalance/blob/main/images/Sequence-diagram.jpg)
 
 
 ## **Deployment Diagram**  
 
-![AWS Cloud Architecture](#)(https://github.com/cphilli4/bitebalance/blob/main/images/Cloud-Architecture.jpg)
+![AWS Cloud Architecture](#) ![./imges/Cloud-Architecture.jpg](https://github.com/cphilli4/bitebalance/blob/main/images/Cloud-Architecture.jpg)
 
 **Key Components**:
 - **Frontend**: Built with React Native for mobile platforms.  
