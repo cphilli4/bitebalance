@@ -117,7 +117,7 @@ function MealInfoView({ selectedDate }: { selectedDate: Date }) {
             return (
               <View key={index} style={styles.contentContainer}>
                 <Text>{contentInfo[0]}</Text>
-                <Text>Amount: {contentInfo[1]}</Text>
+                <Text>{contentInfo[1]} oz</Text>
               </View>
             );
           })}

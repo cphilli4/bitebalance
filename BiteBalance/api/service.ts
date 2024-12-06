@@ -21,6 +21,7 @@ export const uploadImage = async (formData: FormData) => {
 
 export const fetchMonthMeals = async (date: string) => {
   const route = `${BASE_URL + MEAL_DATES}?date=${date}`
+  console.log('fetch meals by day', route)
   try {
     const response = await fetch(route, {
       method: "GET",
