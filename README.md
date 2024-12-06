@@ -15,12 +15,13 @@ The Diet Analyzer is an AI-powered dietary analysis application tailored to enha
 
 ---
 ## **Core Functionality Sequence Diagram**  
-![Sequence Diagram for dietary analysis] (imges/Sequence-diagram.jpg)
+
+![Sequence Diagram for dietary analysis](#) (./imges/Sequence-diagram.jpg)
 
 
 ## **Deployment Diagram**  
 
-![AWS Cloud Architecture](#) (images/Cloud-Architecture.jpg)   
+![AWS Cloud Architecture](#) (./images/Cloud-Architecture.jpg)   
 
 **Key Components**:
 - **Frontend**: Built with React Native for mobile platforms.  
